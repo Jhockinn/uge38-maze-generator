@@ -148,12 +148,10 @@ class Maze {
         }
     }
 
-    // NY METODE: Fjern alle indre vægge for at starte Recursive Division
     removeAllInnerWalls() {
         for (let i = 0; i < this.rows; i += 1) {
             for (let j = 0; j < this.cols; j += 1) {
                 const cell = this.grid[i][j];
-                // Behold kun ydervægge
                 cell.walls.top = (j === 0);
                 cell.walls.bottom = (j === this.cols - 1);
                 cell.walls.left = (i === 0);
@@ -162,14 +160,10 @@ class Maze {
         }
     }
 
-    // NY METODE: Recursive Division algoritme
     recursiveDivision(x, y, width, height) {
-        // Stop hvis området er for småt
         if (width < 2 || height < 2) {
             return;
         }
-
-        // Vælg om vi skal dele horisontalt eller vertikalt
         const horizontal = width < height ? true : (width > height ? false : Math.random() > 0.5);
 
         if (horizontal) {
@@ -177,7 +171,6 @@ class Maze {
             const wallY = y + randomInteger(0, height - 1);
             const passageX = x + randomInteger(0, width);
 
-            // Tegn vandret væg med ét hul
             for (let i = x; i < x + width; i++) {
                 if (i !== passageX) {
                     this.grid[i][wallY].walls.bottom = true;
@@ -187,15 +180,13 @@ class Maze {
                 }
             }
 
-            // Rekursivt del de to nye områder
             this.recursiveDivision(x, y, width, wallY - y + 1);
             this.recursiveDivision(x, wallY + 1, width, y + height - wallY - 1);
         } else {
-            // Del vertikalt
+
             const wallX = x + randomInteger(0, width - 1);
             const passageY = y + randomInteger(0, height);
 
-            // Tegn lodret væg med ét hul
             for (let j = y; j < y + height; j++) {
                 if (j !== passageY) {
                     this.grid[wallX][j].walls.right = true;
@@ -205,13 +196,12 @@ class Maze {
                 }
             }
 
-            // Rekursivt del de to nye områder
             this.recursiveDivision(x, y, wallX - x + 1, height);
             this.recursiveDivision(wallX + 1, y, x + width - wallX - 1, height);
         }
     }
 
-    // MODIFICERET: Din originale generate metode (Recursive Backtracking)
+
     recursiveBacktracking() {
         const start_x = randomInteger(0, this.cols);
         const start_y = randomInteger(0, this.rows);
@@ -219,7 +209,7 @@ class Maze {
         let stack = [];
         let visitCounter = 0;
 
-        // Reset visited status
+
         for (let i = 0; i < this.rows; i += 1) {
             for (let j = 0; j < this.cols; j += 1) {
                 this.grid[i][j].visited = false;
